@@ -1,0 +1,36 @@
+git init
+git add .
+git commit -m "Message Here..."
+git remote add origin https://github.com/johnlouisuru/erc.git
+git push -u origin master (if mag-error remote contains work that you 
+do not have locally , do Step 10)
+if not error: git commit -m "Message Here..."
+git push -u origin master
+
+Step 10: git pull --rebase origin master
+: git commit -m "Message Here..."
+
+git config --global user.email "johnlouisuru@gmail.com"
+git config --global user.name "johnlouisuru"
+
+
+working so far,
+git init
+git commit -m "Message"
+git push origin main
+
+to pull:
+
+git init
+#git config --global github.user "johnlouisuru"
+#git config --global github.token "<url>"
+#git remote add origin <url>
+git pull --rebase origin master
+
+to push:
+
+git init
+git add .
+git commit -m "Message mo"
+git push -u origin master
+                                                                                                                                                                                                                      
