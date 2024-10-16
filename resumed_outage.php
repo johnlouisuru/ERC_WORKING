@@ -174,7 +174,7 @@ require('all_about_outages.php');
       <h1><i class="bi bi-database-check"></i> UNIT/s OUTAGE HISTORY</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item active"><a href="dashboard.php">Home</a></li>
+          <li class="breadcrumb-item active"><a href="all_units.php">Home</a></li>
           <li class="breadcrumb-item">List</li>
         </ol>
       </nav>

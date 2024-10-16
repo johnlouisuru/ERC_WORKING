@@ -41,7 +41,7 @@ require('head.php');
       <h1><i class="bi bi-buildings"></i> ALL UNITS</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item active"><a href="dashboard.php">Home</a></li>
+          <li class="breadcrumb-item active"><a href="all_units.php">Home</a></li>
           <li class="breadcrumb-item">List</li>
         </ol>
       </nav>
