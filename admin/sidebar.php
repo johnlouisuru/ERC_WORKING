@@ -3,11 +3,19 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
-      <li class="nav-heading">Main Dashboard</li>
+      <li class="nav-heading">OUTAGE Dashboard</li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="dashboard.php">
+          <i class="bi bi-lightning-fill"></i>
+          Outage Dashboard  
+        </a>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-heading">DERATING Dashboard</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#">
           <i class="bi bi-menu-button-wide"></i>
-          Dashboard  
+          Derating Dashboard  
         </a>
       </li><!-- End Register Page Nav -->
       <li class="nav-heading"> Generating Company</li>

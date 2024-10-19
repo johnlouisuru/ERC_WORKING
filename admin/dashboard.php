@@ -21,7 +21,7 @@ $month_today = date("F");
       var interval;
       function callAjax() {
         
-        var y = $('#tots_logs').val();
+        var y = $('#tots_logs').attr('value');
         var x = 0;
         //alert(y);
         var formData = {
@@ -40,16 +40,16 @@ $month_today = date("F");
               interval = setTimeout(callAjax, 3000);
 
               //alert(data['message']);
-              
-              
               if(data['increment'] == "yes"){
                 y++;
                 x = parseInt(y);
                 $('#tots_logs').val(x);
                 q.play();
-                //$('.toast').toast('show');
+                var sel2 = $(".toast-body");
+                sel2.empty();
+                sel2.append(data['message']);
+                $('.toast').toast('show');
               }
-
               //document.getElementById("tots_logs").value = x;
             });
             event.preventDefault();
@@ -74,6 +74,25 @@ $month_today = date("F");
   ?>
 
 <main id="main" class="main">
+  <!-- Toast with Placements -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11" data-bs-autohide="false">
+  <div id='liveToast'
+  class="toast"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true">
+              <div class="toast-header" >
+                <i class="bx bx-bell me-2"></i>
+                <div class="me-auto fw-semibold">Notification</div>
+                <small id='minutes'>Just Now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body alert alert-info">
+        </div>
+      </div>
+    </div>
+              <!-- Toast with Placements -->
+
     <audio id="myAudio" controls hidden>
       <source src="notif/new_logs.mp3" type="audio/ogg">
       <source src="notif/new_logs.mp3" type="audio/mpeg">
@@ -139,6 +158,35 @@ $month_today = date("F");
     ?>
                     <div class="ps-3">
                       <h6><?=mysqli_num_rows($check_outage)?></h6>
+                      <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- unPLANNED OUTAGE EVENT TODAY -->
+
+            <!-- unPLANNED OUTAGE EVENT TODAY -->
+            <div class="col-xxl-6 col-md-6">
+              <div class="card info-card sales-card">
+
+
+                <div class="card-body">
+                  <h5 class="card-title"><a href="outage-unplanned.php">ON-TIME Outage Event</a></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-clipboard-x"></i>
+                    </div>
+                    <?php 
+
+                      $check_outage_ontime = mysqli_query($db,"SELECT * FROM outage_event where TIMESTAMPDIFF(HOUR,date_in,date_occ) < 48");
+                      //echo print_r($check_outage_ontime);
+                    ?>
+                    <div class="ps-3">
+                      <h6><?=mysqli_num_rows($check_outage_ontime)?></h6>
                       <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                     </div>
@@ -334,6 +382,8 @@ $month_today = date("F");
 
               <div class="activity">
                 <?php 
+                  $get_orig_logs = mysqli_query($db,"select * from logs");
+                  $orig_logs_count = mysqli_num_rows($get_orig_logs);
                   $get_logs = mysqli_query($db,"select * from logs ORDER BY date DESC LIMIT 10");
                   $logs_exist = mysqli_num_rows($get_logs);
                   if($logs_exist >= 1){
@@ -353,7 +403,7 @@ $month_today = date("F");
                         
 
                         ?>
-                        <input type="hidden" value="<?=$logs_exist?>" id="tots_logs">
+                        
                         <div class="activity-item d-flex">
                           <div class="activite-label"><?=facebook_time_ago($date_occ)?></div>
                           <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
@@ -385,6 +435,7 @@ $month_today = date("F");
                   <?php
                   }
                 ?>
+                <input type="hidden" value="<?=$orig_logs_count?>" id="tots_logs">
 
                 
 
@@ -645,6 +696,62 @@ $month_today = date("F");
           </div>
         </div>
         <!-- TYPE OF CLASS -->
+
+        <!-- TECH -->
+         <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Number of Outages according to its Technology</h5>
+
+              <!-- Line Chart -->
+              <canvas id="lineChart2" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#lineChart2'), {
+                    type: 'line',
+                    data: {
+                      labels: [
+                        <?php 
+                          $all_data = '';
+                          $get_tech = mysqli_query($db,"select * from tech");
+                          if(mysqli_num_rows($get_tech)>= 1){
+                            while($row_tech = mysqli_fetch_assoc($get_tech)){
+                              $query_tables = mysqli_query($db, "SELECT * FROM outage_event WHERE tech_id = '".$row_tech['id']."'");
+
+                                  ?>
+                                   '<?=$row_tech['tech_name']?>',
+                                  <?php
+                                  $all_data = $all_data . mysqli_num_rows($query_tables). ',';
+                                
+                            }
+                          }
+                        ?>
+                        ],
+                      datasets: [{
+                        label: 'Technology Outages',
+                        data: [<?=$all_data?>],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Line CHart -->
+
+            </div>
+          </div>
+        </div>
+        <!-- TECH -->
+        <!-- <?=print_r($query_tables)?> -->
 
       </div>
     </section>

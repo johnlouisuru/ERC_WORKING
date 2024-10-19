@@ -36,7 +36,8 @@ require('head.php');
       <h1><i class="bi bi-buildings"></i> ALL REGISTERED FACILITIES</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item active"><a href="gen-company.php">Home</a></li>
+          <li class="breadcrumb-item active">
+            <a href="#" onclick="javascript:history.go(-1)">Home</a></li>
           <li class="breadcrumb-item">Facilities</li>
         </ol>
       </nav>

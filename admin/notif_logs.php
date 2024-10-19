@@ -6,13 +6,17 @@ include('db/conn.php');
 //session_start();
 $data = [];
 $data['increment'] = 'no';
+/*$check_logs = mysqli_query($db,"SELECT * FROM logs ORDER BY id DESC");
+$how_many_logs = mysqli_num_rows($check_logs);
+echo $how_many_logs.' ->'.$_POST['tots_logs'];
+die();*/
 if($_POST['tots_logs'] != 0){
 	$check_logs = mysqli_query($db,"SELECT * FROM logs ORDER BY id DESC");
 	$how_many_logs = mysqli_num_rows($check_logs);
 	$remarks = '';
 	$color = '';
 	$time = '';
-	if($how_many_logs == $_POST['tots_logs']){
+	if($how_many_logs === $_POST['tots_logs']){
 		//$data['message'] = 'No Outage Event Occured.';
 		$data['increment'] = 'no';
 	}

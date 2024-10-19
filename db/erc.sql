@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2024 at 04:13 PM
+-- Generation Time: Oct 19, 2024 at 09:16 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -40,7 +40,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `user`, `pass`, `is_admin`, `email`) VALUES
-(1, '21232f297a57a5a743894a0e4a801fc3', '21232f297a57a5a743894a0e4a801fc3', 1, 'jlouisuru@gmail.com');
+(1, '21232f297a57a5a743894a0e4a801fc3', '21232f297a57a5a743894a0e4a801fc3', 1, 'erc.admin@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -87,8 +87,9 @@ CREATE TABLE `gf_details` (
 
 INSERT INTO `gf_details` (`id`, `gc_id`, `grid`, `region`, `gf_name`, `gf_user`, `gf_pass`, `address`, `contact`, `date`) VALUES
 (1, 1, 1, 1, 'Saol Coal Power Plant', 'e8e3e40fd5bd09da5a3f9c407f01009a', '21232f297a57a5a743894a0e4a801fc3', 'Saol St. Pinagpala Quezon City', '0912345678', '2024-10-04 20:29:00'),
-(2, 2, 4, 7, 'Jonh-TraVolta', 'a1423b7bbd7522605a6267121a91e6f1', '21232f297a57a5a743894a0e4a801fc3', 'Barangay Kinuryente, Region 7', '8-7000', '2024-10-06 14:07:03'),
-(3, 3, 5, 4, 'En-Gen Desel', '0eba728efd25856c33946447cbcbc05a', '21232f297a57a5a743894a0e4a801fc3', 'Barangay En Gen Diesel, Region 4', '67-000', '2024-10-06 14:43:36');
+(2, 2, 2, 7, 'Jonh-TraVolta', 'a1423b7bbd7522605a6267121a91e6f1', '21232f297a57a5a743894a0e4a801fc3', 'Barangay Kinuryente, Region 7', '8-7000', '2024-10-06 14:07:03'),
+(3, 3, 3, 4, 'En-Gen Desel', '0eba728efd25856c33946447cbcbc05a', '21232f297a57a5a743894a0e4a801fc3', 'Barangay En Gen Diesel, Region 4', '67-000', '2024-10-06 14:43:36'),
+(4, 1, 2, 2, 'Enel', '', '', 'Enel St. Pinagpala Quezon City', '68-000', '2024-10-13 16:28:07');
 
 -- --------------------------------------------------------
 
@@ -109,7 +110,9 @@ INSERT INTO `grid` (`id`, `grid_name`) VALUES
 (1, 'Luzon'),
 (2, 'Visayas'),
 (3, 'Mindanao'),
-(4, 'Off-Grid');
+(4, 'Off-Grid Luzon'),
+(5, 'Off-Grid Visayas'),
+(6, 'Off-Grid Mindanao');
 
 -- --------------------------------------------------------
 
@@ -153,6 +156,26 @@ CREATE TABLE `logs` (
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `logs`
+--
+
+INSERT INTO `logs` (`id`, `gc_id`, `gf_id`, `unit_id`, `activity`, `date_occ`, `date_res`, `date`) VALUES
+(1, 3, 3, 4, 'Submitted Outage Event', '2024-10-09 16:02:00', NULL, '2024-10-11 16:28:46'),
+(2, 3, 3, 4, 'Resumed Outage Event', NULL, '2024-10-09 18:05:00', '2024-10-11 16:29:54'),
+(3, 1, 1, 2, 'Submitted Outage Event', '2024-10-10 21:00:00', NULL, '2024-10-11 16:30:29'),
+(4, 1, 1, 2, 'Resumed Outage Event', NULL, '2024-10-11 01:25:00', '2024-10-11 16:32:54'),
+(5, 1, 1, 1, 'Submitted Outage Event', '2024-10-23 16:00:00', NULL, '2024-10-11 16:33:32'),
+(6, 1, 1, 2, 'Submitted Outage Event', '2024-10-18 16:00:00', NULL, '2024-10-13 22:47:18'),
+(7, 1, 1, 2, 'Resumed Outage Event', NULL, '2024-10-19 17:00:00', '2024-10-13 22:53:18'),
+(8, 1, 1, 1, 'Resumed Outage Event', NULL, '2024-10-23 17:00:00', '2024-10-13 22:53:49'),
+(9, 1, 1, 1, 'Submitted Outage Event', '2024-10-13 23:00:00', NULL, '2024-10-13 22:54:44'),
+(10, 1, 1, 1, 'Resumed Outage Event', NULL, '2024-10-13 23:15:00', '2024-10-13 23:16:22'),
+(11, 1, 1, 1, 'Submitted Outage Event', '2024-10-12 19:00:00', NULL, '2024-10-13 23:16:47'),
+(12, 1, 1, 1, 'Resumed Outage Event', NULL, '2024-10-14 14:54:00', '2024-10-16 20:35:44'),
+(13, 3, 3, 4, 'Submitted Outage Event', '2024-10-19 13:00:00', NULL, '2024-10-19 14:20:21'),
+(14, 3, 3, 4, 'Resumed Outage Event', NULL, '2024-10-19 14:20:00', '2024-10-19 14:23:43');
+
 -- --------------------------------------------------------
 
 --
@@ -195,27 +218,29 @@ CREATE TABLE `outage_event` (
   `time_occ` text NOT NULL,
   `date_res` datetime DEFAULT NULL,
   `time_res` text DEFAULT NULL,
-  `hours_outage` text DEFAULT NULL,
+  `planned_compliance` text DEFAULT NULL,
   `reason` text NOT NULL,
+  `cause_code` text NOT NULL,
   `too` int(11) NOT NULL,
   `too_description` int(11) DEFAULT NULL,
   `outage_class` int(11) NOT NULL,
   `date_in` datetime NOT NULL DEFAULT current_timestamp(),
-  `is_completed` text NOT NULL DEFAULT 'N'
+  `is_completed` text DEFAULT NULL,
+  `tech_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `outage_event`
 --
 
-INSERT INTO `outage_event` (`id`, `gc_id`, `gf_id`, `unit_id`, `total_outage`, `date_occ`, `time_occ`, `date_res`, `time_res`, `hours_outage`, `reason`, `too`, `too_description`, `outage_class`, `date_in`, `is_completed`) VALUES
-(3, 1, 1, 1, '980', '2024-09-17 12:35:00', '12:35', '2024-09-18 19:35:00', '19:35', NULL, 'Detailed Reason here...', 2, 6, 8, '2024-10-05 20:50:38', 'Y'),
-(4, 1, 1, 2, '611', '2024-10-05 16:30:00', '16:30', NULL, NULL, NULL, 'Leakage', 1, 1, 1, '2024-10-05 22:26:13', 'N'),
-(10, 2, 2, 3, '5500', '2024-10-06 12:00:00', '12:00', '2024-10-06 23:55:00', '23:55', NULL, 'Sample Reasoning', 2, 4, 4, '2024-10-06 14:27:49', 'Y'),
-(16, 3, 3, 4, '2000', '2024-10-06 16:30:00', '16:30', NULL, NULL, NULL, 'Detailed Reason here...', 2, 5, 2, '2024-10-06 14:46:46', 'N'),
-(17, 1, 1, 1, '100', '2024-08-08 16:50:00', '16:50', '2024-08-09 19:35:00', '19:35', NULL, 'Sample Reason', 2, 5, 1, '2024-10-06 19:23:37', 'Y'),
-(18, 2, 2, 3, '10', '2024-10-06 21:30:00', '21:30', '2024-10-06 23:55:00', '23:55', NULL, 'Sample with Logs', 2, 4, 1, '2024-10-06 21:29:37', 'Y'),
-(19, 2, 2, 3, '100', '2024-10-05 22:50:00', '22:50', '2024-10-06 23:55:00', '23:55', NULL, 'Sample Reason', 2, 6, 1, '2024-10-06 21:35:09', 'Y');
+INSERT INTO `outage_event` (`id`, `gc_id`, `gf_id`, `unit_id`, `total_outage`, `date_occ`, `time_occ`, `date_res`, `time_res`, `planned_compliance`, `reason`, `cause_code`, `too`, `too_description`, `outage_class`, `date_in`, `is_completed`, `tech_id`) VALUES
+(1, 3, 3, 4, '10', '2024-10-09 16:02:00', '16:02', '2024-10-19 14:20:00', '14:20', 'N/A', 'dwadwadawdaw', '', 2, 5, 1, '2024-10-11 16:28:46', 'Y', 3),
+(2, 1, 1, 2, '10', '2024-10-10 21:00:00', '21:00', '2024-10-19 17:00:00', '17:00', 'N/A', 'dwadwadwa', '', 2, 4, 4, '2024-10-11 16:30:29', 'Y', 7),
+(3, 1, 1, 1, '10', '2024-10-23 16:00:00', '16:00', '2024-10-14 14:54:00', '14:54', '11', 'Advance ito kasi Planned ito.', '', 1, 1, 7, '2024-10-11 16:33:32', 'Y', 5),
+(4, 1, 1, 2, '10', '2024-10-18 16:00:00', '16:00', '2024-10-19 17:00:00', '17:00', '4', 'Planned Oct 13 nag file, pero Oct 18 ang Outage', '', 1, 1, 6, '2024-10-13 22:47:18', 'Y', 7),
+(5, 1, 1, 1, '10', '2024-10-13 23:30:00', '23:30', '2024-10-14 14:54:00', '14:54', '-1', 'pLANNED  Today dated', '', 1, 1, 4, '2024-10-13 22:54:44', 'Y', 5),
+(6, 1, 1, 1, '1', '2024-10-12 19:00:00', '19:00', '2024-10-14 14:54:00', '14:54', 'N/A', 'Kahapon ito lalabas sa database', '', 2, 5, 5, '2024-10-13 23:16:47', 'Y', 5),
+(7, 3, 3, 4, '250', '2024-10-19 13:00:00', '13:00', '2024-10-19 14:20:00', '14:20', 'N/A', 'Grabe, biglaang. shox', '', 2, 5, 6, '2024-10-19 14:20:21', 'Y', 3);
 
 -- --------------------------------------------------------
 
@@ -270,15 +295,18 @@ CREATE TABLE `tech` (
 INSERT INTO `tech` (`id`, `tech_name`) VALUES
 (1, 'BESS'),
 (2, 'BIOMASS'),
-(3, 'COAL-FIRED'),
+(3, 'PULVERIZED COAL'),
 (4, 'COMBINED-CYCLE'),
 (5, 'GEOTHERMAL'),
 (6, 'HYDRO'),
-(7, 'OIL-BASED'),
+(7, 'DIESEL'),
 (8, 'OPEN-CYCLE'),
 (9, 'SOLAR'),
 (10, 'WIND'),
-(11, 'HYBRID');
+(11, 'HYBRID'),
+(12, 'CIRCULATING FLUIDIZED BED'),
+(13, 'GAS TURBINE'),
+(14, 'OIL-FIRED THERMAL');
 
 -- --------------------------------------------------------
 
@@ -297,7 +325,9 @@ CREATE TABLE `type_of_outage` (
 
 INSERT INTO `type_of_outage` (`id`, `outage_type`) VALUES
 (1, 'Planned Outage'),
-(2, 'Unplanned Outage');
+(2, 'Unplanned Outage'),
+(3, 'Planned Derating'),
+(4, 'Unplanned Derating');
 
 -- --------------------------------------------------------
 
@@ -321,7 +351,12 @@ INSERT INTO `type_of_outage_description` (`id`, `too_id`, `description`) VALUES
 (3, 2, 'Forced Outage'),
 (4, 2, 'Maintenance Outage'),
 (5, 2, 'Outside Management Control Outage'),
-(6, 2, 'Extended GOMP');
+(6, 2, 'Extended GOMP'),
+(7, 3, 'Planned Derating'),
+(8, 4, 'Forced Derating'),
+(9, 4, 'Maintenance Derating'),
+(10, 4, 'Outside Management Control Derating'),
+(11, 4, 'Extended GOMP');
 
 --
 -- Indexes for dumped tables
@@ -419,13 +454,13 @@ ALTER TABLE `gc_details`
 -- AUTO_INCREMENT for table `gf_details`
 --
 ALTER TABLE `gf_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `grid`
 --
 ALTER TABLE `grid`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `gu_details`
@@ -437,7 +472,7 @@ ALTER TABLE `gu_details`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `outage_class`
@@ -449,7 +484,7 @@ ALTER TABLE `outage_class`
 -- AUTO_INCREMENT for table `outage_event`
 --
 ALTER TABLE `outage_event`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `table_region`
@@ -461,19 +496,19 @@ ALTER TABLE `table_region`
 -- AUTO_INCREMENT for table `tech`
 --
 ALTER TABLE `tech`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `type_of_outage`
 --
 ALTER TABLE `type_of_outage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `type_of_outage_description`
 --
 ALTER TABLE `type_of_outage_description`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

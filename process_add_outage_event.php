@@ -37,6 +37,10 @@ if(mysqli_num_rows($check_if_under_outage) >= 1){
   else {
 
   }
+ //Get natin ang TECH_ID ni GU_details
+  $fetch_tech = mysqli_query($db, "SELECT * FROM gu_details WHERE id='$_POST[own_unit_]'");
+  $gtech = $fetch_tech->fetch_assoc();  
+  $g_tech = $gtech['tech'];
 
  //Check kung yung Planned Outage ay 10 days prior
   //$sql = mysqli_query($db, "SELECT * FROM outage_event WHERE unit_id = '$_POST[own_unit_]' AND gf_id='$_SESSION[gf_id]' AND is_completed='Y'");
@@ -46,8 +50,8 @@ if(mysqli_num_rows($check_if_under_outage) >= 1){
   
 if($_POST['too_'] != 0 && strlen($_POST['o_desc_']) != 0){
 	$combined_date_time = $_POST['date_of_occ_'].' '.$_POST['time_of_occ_'].':00';
-	$query2 = mysqli_query($db,"INSERT INTO outage_event(gc_id,gf_id,unit_id,total_outage,date_occ,time_occ,reason,too,too_description,outage_class,is_completed,planned_compliance)
-    VALUES('$_SESSION[gc_id]','$_SESSION[gf_id]','$_POST[own_unit_]','$_POST[total_outage_]','$combined_date_time','$_POST[time_of_occ_]','$_POST[reason_]','$_POST[too_]','$_POST[o_desc_]','$_POST[outage_class_]','N','$planned_compliance')");
+	$query2 = mysqli_query($db,"INSERT INTO outage_event(gc_id,gf_id,unit_id,total_outage,date_occ,time_occ,reason,too,too_description,outage_class,is_completed,planned_compliance,tech_id)
+    VALUES('$_SESSION[gc_id]','$_SESSION[gf_id]','$_POST[own_unit_]','$_POST[total_outage_]','$combined_date_time','$_POST[time_of_occ_]','$_POST[reason_]','$_POST[too_]','$_POST[o_desc_]','$_POST[outage_class_]','N','$planned_compliance','$g_tech')");
 
     $query_logs = mysqli_query($db,"INSERT INTO logs(gc_id,gf_id,unit_id,activity,date_occ)
     	VALUE('$_SESSION[gc_id]','$_SESSION[gf_id]','$_POST[own_unit_]','Submitted Outage Event','$combined_date_time')");
