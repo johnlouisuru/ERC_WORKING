@@ -230,7 +230,7 @@ $month_today = date("F");
 
 
                 <div class="card-body">
-                  <h5 class="card-title"><a href="outage-unresumed.php">All Unresumed Outage Event</a></h5>
+                  <h5 class="card-title"><a href="outage-unresumed.php">All Under Outage Event</a></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">

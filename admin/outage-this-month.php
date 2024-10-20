@@ -240,7 +240,7 @@ require('fb_time_ago.php');
                       $minutes = round($seconds / 60 );           // value 60 is seconds  
                       $hours   = round($seconds / 3600);           //value 3600 is 60 minutes * 60 sec  
                       if($rows['is_completed'] == 'N'){
-                        $hours = 'Unresumed';
+                        $hours = 'Still on Outage';
                       }
                       else if($hours < 0){
                         $hours = 'Not yet Occurred';
@@ -259,7 +259,7 @@ require('fb_time_ago.php');
                       }else if($hours == "Not yet Occurred"){ ?>
                         <td class="text-success"><?=$hours?></td>
                       <?php 
-                      }else if($hours == "Unresumed"){ ?>
+                      }else if($hours == "Still on Outage"){ ?>
                         <td class="text-warning"><?=$hours?></td>
                       <?php 
                       }
